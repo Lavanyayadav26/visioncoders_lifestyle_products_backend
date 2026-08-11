@@ -1,2 +1,0 @@
-[start]
-cmd = "java -jar backend/target/*.jar"
