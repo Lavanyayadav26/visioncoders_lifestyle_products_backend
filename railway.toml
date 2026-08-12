@@ -1,6 +1,9 @@
 [build]
 builder = "nixpacks"
-buildCommand = "MAVEN_OPTS='-Xmx256m -Xms128m' mvn clean package -DskipTests"
+buildCommand = "MAVEN_OPTS='-Xmx384m -Xms128m' mvn clean package -DskipTests"
+
+[build.env]
+NIXPACKS_JDK_VERSION = "21"
 
 [deploy]
 startCommand = "java -jar target/app.jar"
