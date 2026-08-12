@@ -1,4 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://visioncoderslifestyleproductsbackend-production.up.railway.app/api';
+const API_BASE_URL = import.meta.env.MODE === 'production' 
+  ? 'https://visioncoderslifestyleproductsbackend-production.up.railway.app/api'
+  : (import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:8080/api');
 
 // Helper to get authorization headers if token exists
 const getHeaders = (optionsHeaders = {}) => {
