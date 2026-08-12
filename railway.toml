@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "mvn clean package -DskipTests"
+buildCommand = "MAVEN_OPTS='-Xmx256m -Xms128m' mvn clean package -DskipTests"
 
 [deploy]
 startCommand = "java -jar target/app.jar"
