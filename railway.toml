@@ -6,4 +6,4 @@ buildCommand = "MAVEN_OPTS='-Xmx384m -Xms128m' mvn clean package -DskipTests"
 NIXPACKS_JDK_VERSION = "21"
 
 [deploy]
-startCommand = "java -jar target/app.jar"
+startCommand = "java -jar backend/target/app.jar"
