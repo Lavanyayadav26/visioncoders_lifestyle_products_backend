@@ -1,9 +1,0 @@
-[build]
-builder = "nixpacks"
-buildCommand = "mvn clean package -DskipTests"
-
-[build.env]
-NIXPACKS_JDK_VERSION = "21"
-
-[deploy]
-startCommand = "java -jar backend/target/app.jar"
