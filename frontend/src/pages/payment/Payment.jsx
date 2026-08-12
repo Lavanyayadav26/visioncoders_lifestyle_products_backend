@@ -12,14 +12,6 @@ export default function Payment() {
   const { user } = useAuth();
   const { clearCart } = useCart();
 
-  // Retrieve passed order details from router state
-  const state = location.state;
-  if (!state || !state.orderId || !state.amount) {
-    return <Navigate to="/cart" replace />;
-  }
-
-  const { orderId, amount } = state;
-
   // Form inputs (Backup card method / Simulation details)
   const [paymentMethod, setPaymentMethod] = useState('RAZORPAY'); // 'RAZORPAY' | 'CREDIT_CARD'
   const [cardNumber, setCardNumber] = useState('');
@@ -31,6 +23,14 @@ export default function Payment() {
   const [result, setResult] = useState(null); // 'success' | 'failed'
   const [transactionId, setTransactionId] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
+  // Retrieve passed order details from router state
+  const state = location.state;
+  if (!state || !state.orderId || !state.amount) {
+    return <Navigate to="/cart" replace />;
+  }
+
+  const { orderId, amount } = state;
 
   // Dynamic Razorpay SDK Injection helper
   const loadRazorpayScript = () => {
