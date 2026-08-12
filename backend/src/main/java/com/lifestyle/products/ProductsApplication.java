@@ -23,8 +23,8 @@ public class ProductsApplication {
 				
 				if (userInfo != null && userInfo.contains(":")) {
 					String[] auth = userInfo.split(":", 2);
-					System.setProperty("spring.datasource.username", auth[0]);
-					System.setProperty("spring.datasource.password", auth[1]);
+					System.setProperty("spring.datasource.username", java.net.URLDecoder.decode(auth[0], "UTF-8"));
+					System.setProperty("spring.datasource.password", java.net.URLDecoder.decode(auth[1], "UTF-8"));
 				}
 				
 				String jdbcUrl = "jdbc:mysql://" + host + ":" + port + path;
