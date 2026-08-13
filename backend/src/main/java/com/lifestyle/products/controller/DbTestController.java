@@ -43,4 +43,37 @@ public class DbTestController {
         
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/api/db-tables")
+    public ResponseEntity<?> checkTables() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Connection connection = dataSource.getConnection();
+            if (connection != null && !connection.isClosed()) {
+                response.put("status", "success");
+                response.put("message", "Successfully connected to the database!");
+                
+                List<String> tables = new ArrayList<>();
+                ResultSet rs = connection.getMetaData().getTables(null, null, "%", new String[]{"TABLE"});
+                while (rs.next()) {
+                    tables.add(rs.getString("TABLE_NAME"));
+                }
+                response.put("tables_found", tables);
+                
+                connection.close();
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("status", "error");
+                response.put("message", "Connection was null or closed.");
+                return ResponseEntity.status(500).body(response);
+            }
+        } catch (SQLException e) {
+            response.put("status", "error");
+            response.put("message", "Failed to connect to the database.");
+            response.put("sql_state", e.getSQLState());
+            response.put("error_code", e.getErrorCode());
+            response.put("error_message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
 }
