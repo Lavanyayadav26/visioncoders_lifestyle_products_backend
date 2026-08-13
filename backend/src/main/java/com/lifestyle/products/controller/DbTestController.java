@@ -20,47 +20,20 @@ public class DbTestController {
     private DataSource dataSource;
 
     @GetMapping
-    public ResponseEntity<Map<String, String>> testDbConnection() {
-        Map<String, String> response = new HashMap<>();
-        
-        try {
-            response.put("url_configured", System.getProperty("spring.datasource.url", System.getenv("DB_URL")));
-            response.put("status", "attempting_connection");
-            
-            try (Connection conn = dataSource.getConnection()) {
-                response.put("status", "success");
-                response.put("message", "Successfully connected to the database!");
-            }
-        } catch (SQLException e) {
-            response.put("status", "failed");
-            response.put("error_message", e.getMessage());
-            response.put("sql_state", e.getSQLState());
-            response.put("error_code", String.valueOf(e.getErrorCode()));
-        } catch (Exception e) {
-            response.put("status", "failed_unknown");
-            response.put("error_message", e.toString());
-        }
-        
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/api/db-tables")
-    public ResponseEntity<?> checkTables() {
+    public ResponseEntity<?> testDatabaseConnection() {
         Map<String, Object> response = new HashMap<>();
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()) {
             if (connection != null && !connection.isClosed()) {
                 response.put("status", "success");
                 response.put("message", "Successfully connected to the database!");
                 
                 List<String> tables = new ArrayList<>();
-                ResultSet rs = connection.getMetaData().getTables(null, null, "%", new String[]{"TABLE"});
+                java.sql.ResultSet rs = connection.getMetaData().getTables(null, null, "%", new String[]{"TABLE"});
                 while (rs.next()) {
                     tables.add(rs.getString("TABLE_NAME"));
                 }
                 response.put("tables_found", tables);
                 
-                connection.close();
                 return ResponseEntity.ok(response);
             } else {
                 response.put("status", "error");
@@ -70,8 +43,6 @@ public class DbTestController {
         } catch (SQLException e) {
             response.put("status", "error");
             response.put("message", "Failed to connect to the database.");
-            response.put("sql_state", e.getSQLState());
-            response.put("error_code", e.getErrorCode());
             response.put("error_message", e.getMessage());
             return ResponseEntity.status(500).body(response);
         }
